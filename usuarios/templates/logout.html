@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block titulo %}
+Logout
+{% endblock %}
+{% block head %}
+    <link rel="stylesheet" href="{% static 'css/signin.css' %}" />
+{% endblock %}
+{% block main %}
+<img class="mb-4" src="{% static 'images/avance.png' %}" alt="" width="150" height="150">
+
+    <h1 class="h3 mb-3 font-weight-normal">Você saiu da sua conta!</h1>
+    <button class="btn btn-primary" type="submit">Login</button>
+    <a href="{% url 'usuarios:pesquisaemail' %}"><button type="button" class="btn btn-outline-warning">
+        Cadastre-se</button></a>
+{% endblock %}

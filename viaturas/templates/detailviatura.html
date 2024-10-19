@@ -1,0 +1,359 @@
+{% extends 'base.html' %}
+{% block titulo %}
+{{ object.dados_tecnicos.classificacao }} - {{ object.modelo }}
+{% endblock %}
+{% block head %}
+<script>
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+    })
+</script>
+{% endblock %}
+{% block main %}
+{% include 'topbar.html' %}
+<div class="row">
+    <div class="col-3">
+        {% include 'sidebarlog.html' %}
+    </div>
+    <div class="col-9">
+        <div class="col-lg-12 mx-auto p-4 py-md-5">
+            <header class="d-flex align-items-center pb-3 mb-5 border-bottom">
+                <div>
+                    <a href="/" class="d-flex align-items-center text-body-emphasis text-decoration-none">
+                        <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"></use></svg>
+                        <span class="fs-4">{{ object.dados_tecnicos.classificacao }} - {{ object.modelo }} - {{ object.patrimonio }}</span>
+                    </a>
+                </div>
+            </header>
+            <br>
+            <br>
+            {% if object.disponibilidade %}
+                <p>Situação: {{ object.disponibilidade.situacao }}</p>
+            {% endif %}
+            <p>Classificação: {{ object.dados_tecnicos.classificacao }}</p>
+            <p>Marca: {{ object.marca }}</p>
+            <p>Modelo: {{ object.modelo }}</p>
+            <p>Placa: {{ object.placa }}</p>
+            <p>Nr Patrimônio: {{ object.patrimonio }}</p>
+            <p>Subunidade: {{ object.subunidade }}</p>
+            {% if object.dados_tecnicos %}
+                <p>Ano de Fabricação: {{ object.dados_tecnicos.ano_fabricacao }}</p>
+                <p>Combustível: {{ object.dados_tecnicos.combustivel }}</p>
+                <p>Odômetro: {{ object.dados_tecnicos.odometro }}</p>
+                <p>Capacidade tanque combustível: {{ object.dados_tecnicos.tanque_combustivel }}</p>
+                <p>Capacidade tanque óleo motor: {{ object.dados_tecnicos.tanque_oleo }}</p>
+                <p>Passageiros: {{ object.dados_tecnicos.capacidade_passageiro }}</p>
+                <p>Chassi: {{ object.dados_tecnicos.chassi }}</p>
+                <p>Modelo bateria: {{ object.dados_tecnicos.bateria }}</p>
+                <p>Modelo Pneu: {{ object.dados_tecnicos.pneu }}</p>
+                <p>Modelo Filtro Óleo: {{ object.dados_tecnicos.filtro_oleo }}</p>
+                <p>Modelo Filtro Ar: {{ object.dados_tecnicos.filtro_ar }}</p>
+                <p>Modelo Filtro Combustível: {{ object.dados_tecnicos.filtro_combs }}</p>
+                <p>Tipo Óleo: {{ object.dados_tecnicos.tipo_oleo }}</p>
+                <p>Consumo Real: {{ object.dados_tecnicos.consumo_real }}</p>
+                <p>Consumo Planejamento: {{ object.dados_tecnicos.consumo_plan }}</p>
+            {% endif %}
+            <br>
+            <br>
+            <header class="d-flex align-items-center pb-3 mb-5 border-bottom">
+                <div class="container text-center" style="display: flex;">
+                    <div class="row">
+                        <div class="col-auto me-auto">
+                            <a href="/" class="d-flex align-items-center text-body-emphasis text-decoration-none">
+                                <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"></use></svg>
+                                <span class="fs-4">Verificações de Pneus</span>
+                            </a>
+                        </div>
+                        <div class="col-auto">
+                            <form action="{% url 'viaturas:createvrfpneu' %}" method="get">
+                                {% csrf_token %}
+                                <fieldset>
+                                    <input type="hidden" name="viatura_id" value="{{ viatura.id }}">
+                                    <button type="submit" class="btn btn-outline-info"><i class="bi bi-plus-circle"></i></button>
+                                </fieldset>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <table class="text-center table table-bordered">
+
+                <thead>
+                    <tr>
+                        <th class="text-center">Pneu</th>
+                        <th class="text-center">Fabricação</th>
+                        <th class="text-center">Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for verificacao in object.verificacao_pneu.all %}
+                        <tr>
+                            <td class="text-center">{{ verificacao.localizacao }}</td>
+                            <td class="text-center">{{ verificacao.fabricacao }}</td>
+                            <td class="text-center">
+                                <div style="display: flex;">
+                                        <a href="#">
+                                            <button type="button" class="btn btn-outline-warning"
+                                                    data-toggle="tooltip" data-placement="top" title="Alterar">
+                                                <i class="bi bi-arrow-clockwise"></i>
+                                            </button>
+                                        </a>&nbsp
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <br>
+            <br>
+            <header class="d-flex align-items-center pb-3 mb-5 border-bottom">
+                <div class="container text-center" style="display: flex;">
+                    <div class="row">
+                        <div class="col-auto me-auto">
+                            <a href="/" class="d-flex align-items-center text-body-emphasis text-decoration-none">
+                                <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"></use></svg>
+                                <span class="fs-4">Verificações de Óleo</span>
+                            </a>
+                        </div>
+                        <div class="col-auto">
+                            <form action="{% url 'viaturas:createvrfoleo' %}" method="get">
+                                {% csrf_token %}
+                                <fieldset>
+                                    <input type="hidden" name="viatura_id" value="{{ viatura.id }}">
+                                    <button type="submit" class="btn btn-outline-info"><i class="bi bi-plus-circle"></i></button>
+                                </fieldset>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <table class="text-center table table-bordered">
+                <thead>
+                    <tr>
+                        <th class="text-center">Data da Troca</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for verificacao in object.verificacao_oleo.all %}
+                        <tr>
+                            <td class="text-center">{{ verificacao.data_troca }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <br>
+            <br>
+            <header class="d-flex align-items-center pb-3 mb-5 border-bottom">
+                <div class="container text-center" style="display: flex;">
+                    <div class="row">
+                        <div class="col-auto me-auto">
+                            <a href="/" class="d-flex align-items-center text-body-emphasis text-decoration-none">
+                                <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"></use></svg>
+                                <span class="fs-4">Verificações Filtros</span>
+                            </a>
+                        </div>
+                        <div class="col-auto">
+                            <form action="{% url 'viaturas:createvrffiltro' %}" method="get">
+                                {% csrf_token %}
+                                <fieldset>
+                                    <input type="hidden" name="viatura_id" value="{{ viatura.id }}">
+                                    <button type="submit" class="btn btn-outline-info"><i class="bi bi-plus-circle"></i></button>
+                                </fieldset>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <table class="text-center table table-bordered">
+                <thead>
+                    <tr>
+                        <th class="text-center">Tipo</th>
+                        <th class="text-center">Data da Troca</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for verificacao in object.verificacao_filtro.all %}
+                        <tr>
+                            <td class="text-center">{{ verificacao.tipo }}</td>
+                            <td class="text-center">{{ verificacao.ultima_troca }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <br>
+            <br>
+            <header class="d-flex align-items-center pb-3 mb-5 border-bottom">
+                <div class="container text-center" style="display: flex;">
+                    <div class="row">
+                        <div class="col-auto me-auto">
+                            <a href="/" class="d-flex align-items-center text-body-emphasis text-decoration-none">
+                                <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"></use></svg>
+                                <span class="fs-4">Outros Componentes</span>
+                            </a>
+                        </div>
+                        <div class="col-auto">
+                            <form action="{% url 'viaturas:createvrfsit' %}" method="get">
+                                {% csrf_token %}
+                                <fieldset>
+                                    <input type="hidden" name="viatura_id" value="{{ viatura.id }}">
+                                    <button type="submit" class="btn btn-outline-info"><i class="bi bi-plus-circle"></i></button>
+                                </fieldset>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <table class="text-center table table-bordered">
+                <thead>
+                    <tr>
+                        <th class="text-center">Nome</th>
+                        <th class="text-center">Situação</th>
+                        <th class="text-center">Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for verificacao in object.verificacao_situacao.all %}
+                        <tr>
+                            <td class="text-center">{{ verificacao.componente }}</td>
+                            <td class="text-center">{{ verificacao.situacao }}</td>
+                            <td>
+                                <div style="display: flex;">
+                                        <a href="#">
+                                            <button type="button" class="btn btn-outline-warning"
+                                                    data-toggle="tooltip" data-placement="top" title="Alterar">
+                                                <i class="bi bi-arrow-clockwise"></i>
+                                            </button>
+                                        </a>&nbsp
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <br>
+            <br>
+            <header class="d-flex align-items-center pb-3 mb-5 border-bottom">
+                <div class="container text-center" style="display: flex;">
+                    <div class="row">
+                        <div class="col-auto me-auto">
+                            <a href="/" class="d-flex align-items-center text-body-emphasis text-decoration-none">
+                                <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"></use></svg>
+                                <span class="fs-4">Ferramental</span>
+                            </a>
+                        </div>
+                        <div class="col-auto">
+                            <form action="{% url 'viaturas:createferramental' %}" method="get">
+                                {% csrf_token %}
+                                <fieldset>
+                                    <input type="hidden" name="ferramental_id" value="{{ viatura.ferramental.id }}">
+                                    <input type="hidden" name="viatura_id" value="{{ viatura.id }}">
+                                    <button type="submit" class="btn btn-outline-info"><i class="bi bi-plus-circle"></i></button>
+                                </fieldset>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <table class="text-center table table-bordered">
+                <thead>
+                    <tr>
+                        <th class="text-center">Nome</th>
+                        <th class="text-center">Situação</th>
+                        <th class="text-center">Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for ferramenta in object.ferramental.item_ferramental.all %}
+                        <tr>
+                            <td class="text-center">{{ ferramenta.nome }}</td>
+                            <td class="text-center">{{ ferramenta.situacao }}</td>
+                            <td>
+                                <div style="display: flex;">
+                                        <a href="#">
+                                            <button type="button" class="btn btn-outline-warning"
+                                                    data-toggle="tooltip" data-placement="top" title="Alterar">
+                                                <i class="bi bi-arrow-clockwise"></i>
+                                            </button>
+                                        </a>&nbsp
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <br>
+            <br>
+            <header class="d-flex align-items-center pb-3 mb-5 border-bottom">
+                <div class="container text-center" style="display: flex;">
+                    <div class="row">
+                        <div class="col-auto me-auto">
+                            <a href="/" class="d-flex align-items-center text-body-emphasis text-decoration-none">
+                                <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"></use></svg>
+                                <span class="fs-4">Alterações</span>
+                            </a>
+                        </div>
+                        <div class="col-auto">
+                            <form action="{% url 'viaturas:createalteracao' %}" method="get">
+                                {% csrf_token %}
+                                <fieldset>
+                                    <input type="hidden" name="viatura_id" value="{{ viatura.id }}">
+                                    <button type="submit" class="btn btn-outline-info"><i class="bi bi-plus-circle"></i></button>
+                                </fieldset>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <table class="text-center table table-bordered">
+                <thead>
+                    <tr>
+                        <th class="text-center">Descrição</th>
+                        <th class="text-center">Nr OS - SISLOGMNT</th>
+                        <th class="text-center">Valor</th>
+                        <th class="text-center">Reparado</th>
+                        <th class="text-center">Data</th>
+                        <th class="text-center">Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for alteracao in object.alteracao.all %}
+                        <tr>
+                            <td class="text-center">{{ alteracao.descricao }}</td>
+                            <td class="text-center">{{ alteracao.nr_os }}</td>
+                            <td class="text-center">{{ alteracao.valor }}</td>
+                            {% if alteracao.is_active %}
+                                <td class="text-center">Não</td>
+                            {% else %}
+                                <td class="text-center">Sim</td>
+                            {% endif %}
+                            <td class="text-center">{{ alteracao.data }}</td>
+                            <td>
+                                <div style="display: flex;">
+                                        <a href="#">
+                                            <button type="button" class="btn btn-outline-warning"
+                                                    data-toggle="tooltip" data-placement="top" title="Alterar">
+                                                <i class="bi bi-arrow-clockwise"></i>
+                                            </button>
+                                        </a>&nbsp
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <div style="text-align: center;">
+            <a href="{% url 'viaturas:readviatura' %}"><button type="button" class="btn btn-outline-warning">
+                    Voltar</button></a>
+            </div>
+        </div>
+    </div>
+</div>
+{% include 'footer.html' %}
+{% endblock %}
+

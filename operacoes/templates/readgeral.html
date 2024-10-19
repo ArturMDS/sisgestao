@@ -1,0 +1,115 @@
+{% extends 'base.html' %}
+{% block titulo %}
+Op {{ object.nome }}
+{% endblock %}
+{% block head %}
+    <style>
+        .text {
+            padding: 5px;
+        }
+    </style>
+{% endblock %}
+{% block main %}
+{% include 'topbar.html' %}
+<div class="row">
+    <div class="col-3">
+        {% include 'sidebarop.html' %}
+    </div>
+    <div class="col-9">
+        <div class="col-lg-12 mx-auto p-4 py-md-5">
+            <header class="d-flex align-items-center pb-3 mb-5 border-bottom">
+                <div>
+                    <a href="/" class="d-flex align-items-center text-body-emphasis text-decoration-none">
+                        <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"></use></svg>
+                        <span class="fs-4">Operação {{ object.nome.upper }} - {{ request.user.pessoa.militar.subunidade.esc_sup.abreviatura }}</span>
+                    </a>
+                </div>
+            </header>
+            <div class="container">
+                <div class="row">
+                    <div class="text-end">
+                        <form method="get" action="{% url 'operacoes:createorgao' %}">
+                            {% csrf_token %}
+                            <input type="hidden" name="id_op" value="{{ object.id }}">
+                            <button type="submit" class="btn btn-outline-info">Criar Órgão</button>
+                        </form>
+                        <br>
+                    </div>
+                </div>
+                <div class="row align-items-start">
+                    <table class="text-center table table-bordered">
+                        <thead>
+                            <tr>
+                                <th width="90%">Órgão</th>
+                                <th width="10%">Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for orgao in object.orgao.all %}
+                                <tr>
+                                    <td width="90%">{{ orgao.nome }} - {{ orgao.subunidade.abreviatura }}</td>
+                                    <td width="10%">
+                                        <div style="display: flex;">
+                                            <form method="get" action="{% url 'operacoes:createoperacional' %}">
+                                                {% csrf_token %}
+                                                <input type="hidden" name="id_org" value="{{ orgao.id }}">
+                                                <input type="hidden" name="id_atv" value="{{ object.id }}">
+                                                <button type="submit" class="btn btn-outline-primary"><i class="bi bi-plus-circle"></i></button>
+                                            </form>&nbsp
+                                            {% if not orgao.operacional.all %}
+                                                <form method="get" action="{% url 'operacoes:delete_orgao' orgao.id %}">
+                                                    {% csrf_token %}
+                                                    <button type="submit" class="btn btn-outline-danger"><i class="bi bi-trash"></i></button>
+                                                </form>
+                                            {% endif %}
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <br><br>
+            <table class="text-center table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Órgão</th>
+                        <th>Subunidade</th>
+                        <th>Efetivo</th>
+                        <th>Posto/Grad</th>
+                        <th>Nome Completo</th>
+                        <th>Nome de Guerra</th>
+                        <th>Função</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for orgao in object.orgao.all %}
+                        {% if orgao.operacional.all %}
+                            <tr>
+                                <td rowspan="{{ orgao.operacional.count }}" class="text-center align-middle">{{ orgao.nome }}</td>
+                                <td rowspan="{{ orgao.operacional.count }}" class="text-center align-middle">{{ orgao.subunidade.abreviatura }}</td>
+                                <td rowspan="{{ orgao.operacional.count }}" class="text-center align-middle">{{ orgao.operacional.count }}</td>
+                            {% for operacional in orgao.operacional.all %}
+                                <td>{{ operacional.militar.posto_grad }}</td>
+                                <td>{{ operacional.militar.pessoa.nome_completo }}</td>
+                                <td>{{ operacional.militar.nome_guerra.upper }}</td>
+                                <td>{{ operacional.funcao }}</td>
+                            </tr>
+                            {% endfor %}
+                        {% endif %}
+                    {% endfor %}
+                    <tr>
+                        <td colspan="3"><b>Efetivo Total</b></td>
+                        <td colspan="4">{{ efetivo_total }}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <br>
+            <br>
+        </div>
+    </div>
+</div>
+{% include 'footer.html' %}
+{% endblock %}
+

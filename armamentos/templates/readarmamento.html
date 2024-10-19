@@ -1,0 +1,188 @@
+{% extends 'base.html' %}
+{% block titulo %}
+Armamentos
+{% endblock %}
+{% block head %}
+<script>
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+    })
+</script>
+{% endblock %}
+{% block main %}
+{% include 'topbar.html' %}
+<div class="row">
+    <div class="col-3">
+        {% include 'sidebarlog.html' %}
+    </div>
+    <div class="col-9">
+        <div class="col-lg-12 mx-auto p-4 py-md-5">
+            <header class="d-flex align-items-center pb-3 mb-5 border-bottom">
+                <div>
+                    <a href="/" class="d-flex align-items-center text-body-emphasis text-decoration-none">
+                        <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"></use></svg>
+                        <span class="fs-4">Resumo Armamentos - {{ request.user.pessoa.militar.subunidade.esc_sup.abreviatura }}</span>
+                    </a>
+                </div>
+
+            </header>
+
+            <table class="text-center table table-bordered">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th colspan="3">Fuzil 7,62mm</th>
+                        <th colspan="3">Pistola 9mm</th>
+                        <th colspan="3">Espingarda 12</th>
+                    </tr>
+                    <tr>
+                        <th scope="col" style="width: 10%">Subunidade</th>
+                        <th scope="col" style="width: 10%">Disp</th>
+                        <th scope="col" style="width: 10%">Indisp</th>
+                        <th scope="col" style="width: 10%">Total</th>
+                        <th scope="col" style="width: 10%">Disp</th>
+                        <th scope="col" style="width: 10%">Indisp</th>
+                        <th scope="col" style="width: 10%">Total</th>
+                        <th scope="col" style="width: 10%">Disp</th>
+                        <th scope="col" style="width: 10%">Indisp</th>
+                        <th scope="col" style="width: 10%">Total</th>
+                    </tr>
+
+                </thead>
+                <tbody>
+                    {% for su in subunidades %}
+                        <tr>
+                            <th scope="row" style="width: 19%">{{ su.abreviatura }}</th>
+                            <td style="width: 9%">{{ su.total_fz_disp }}</td>
+                            <td style="width: 9%">{{ su.total_fz_indisp }}</td>
+                            <td style="width: 9%">{{ su.total_fz }}</td>
+                            <td style="width: 9%">{{ su.total_pst_disp }}</td>
+                            <td style="width: 9%">{{ su.total_pst_indisp }}</td>
+                            <td style="width: 9%">{{ su.total_pst }}</td>
+                            <td style="width: 9%">{{ su.total_esp_disp }}</td>
+                            <td style="width: 9%">{{ su.total_esp_indisp }}</td>
+                            <td style="width: 9%">{{ su.total_esp }}</td>
+                        </tr>
+                    {% endfor %}
+                    <tr>
+                        <th scope="row" style="width: 10%">Total {{ request.user.pessoa.militar.subunidade.esc_sup.abreviatura }}</th>
+                        <td style="width: 10%">{{ fz_disp_total_un }}</td>
+                        <td style="width: 10%">{{ fz_ind_total_un }}</td>
+                        <td style="width: 10%">{{ fz_total_un }}</td>
+                        <td style="width: 10%">{{ pst_disp_total_un }}</td>
+                        <td style="width: 10%">{{ pst_ind_total_un }}</td>
+                        <td style="width: 10%">{{ pst_total_un }}</td>
+                        <td style="width: 10%">{{ esp_disp_total_un }}</td>
+                        <td style="width: 10%">{{ esp_ind_total_un }}</td>
+                        <td style="width: 10%">{{ esp_total_un }}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <br>
+            <br>
+
+            <header class="d-flex align-items-center pb-3 mb-5 border-bottom">
+                <div>
+                    <a href="/" class="d-flex align-items-center text-body-emphasis text-decoration-none">
+                        <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"></use></svg>
+                        <span class="fs-4">Lista de Armamentos - {{ request.user.pessoa.militar.subunidade.esc_sup.abreviatura }}</span>
+                    </a>
+                </div>
+
+            </header>
+
+            <table class="text-center table table-bordered">
+                <div class="text-end">
+                    <a href="{% url 'armamentos:createarmamento' %}">
+                        <button type="button" class="btn btn-outline-info">Novo</button>
+                    </a>
+                    <br>
+                    <br>
+                </div>
+                <thead>
+                    <tr>
+                        <th scope="col">Classificação</th>
+                        <th scope="col">Modelo</th>
+                        <th scope="col">Nr Série</th>
+                        <th scope="col">Situação</th>
+                        <th scope="col">Subunidade</th>
+                        <th scope="col">Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for armamento in object_list %}
+                    <tr>
+
+                        <td>{{ armamento.classificacao }}</td>
+                        <td>{{ armamento.modelo }}</td>
+                        <td><a href="{% url 'armamentos:detailarmamento' armamento.id %}">{{ armamento.nr_serie }}</a></td>
+                        <td>{{ armamento.situacao }}</td>
+                        <td>{{ armamento.subunidade.abreviatura }}</td>
+                        <td>
+                            <div style="display: flex;">
+                                <form action="{% url 'armamentos:createatividade' %}" method="get">
+                                    {% csrf_token %}
+                                    <fieldset>
+                                        <input type="hidden" name="armamento_id" value="{{ armamento.id }}">
+                                        <button type="submit" class="btn btn-outline-success"
+                                                data-toggle="tooltip"
+                                                data-placement="top"
+                                                title="Registrar atividade">
+                                            <i class="bi bi-activity"></i>
+                                        </button>
+                                    </fieldset>
+                                </form>&nbsp
+                                <form action="{% url 'armamentos:createmanutencao' %}" method="get">
+                                    {% csrf_token %}
+                                    <fieldset>
+                                        <input type="hidden" name="armamento_id" value="{{ armamento.id }}">
+                                        <button type="submit" class="btn btn-outline-success"
+                                                data-toggle="tooltip"
+                                                data-placement="top"
+                                                title="Registrar manutenção">
+                                            <i class="bi bi-tools"></i>
+                                        </button>
+                                    </fieldset>
+                                </form>&nbsp
+                                <a href="{% url 'armamentos:updatearmamento' armamento.id %}">
+                                    <button type="button" class="btn btn-outline-warning"
+                                            data-toggle="tooltip" data-placement="top" title="Alterar dados">
+                                        <i class="bi bi-arrow-clockwise"></i>
+                                    </button>
+                                </a>&nbsp
+                                <form action="{% url 'armamentos:createalteracao' %}" method="get">
+                                    {% csrf_token %}
+                                    <fieldset>
+                                        <input type="hidden" name="armamento_id" value="{{ armamento.id }}">
+                                        <button type="submit" class="btn btn-outline-warning"
+                                                data-toggle="tooltip"
+                                                data-placement="top"
+                                                title="Registrar alteração">
+                                            <i class="bi bi-pencil-square"></i>
+                                        </button>
+                                    </fieldset>
+                                </form>&nbsp
+                                <a href="{% url 'armamentos:recolhimento_armamento' armamento.id %}">
+                                    <button type="button" class="btn btn-outline-danger"
+                                            data-toggle="tooltip" data-placement="top" title="Registrar recolhimento">
+                                        <i class="bi bi-gear"></i>
+                                    </button>
+                                </a>&nbsp
+                                <a href="{% url 'armamentos:descarga_armamento' armamento.id %}">
+                                    <button type="button" class="btn btn-outline-danger"
+                                            data-toggle="tooltip" data-placement="top" title="Registrar descarga">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </a>&nbsp
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% include 'footer.html' %}
+{% endblock %}
+

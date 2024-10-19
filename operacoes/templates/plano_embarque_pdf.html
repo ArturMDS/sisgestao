@@ -1,0 +1,115 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        @page {
+            size: A4 landscape;  /* Define o tamanho da página como A4 em orientação paisagem */
+            margin: 1cm;  /* Define a margem da página */
+        }
+        body {
+            font-family: Calibri;
+            font-size: 0.3cm;
+        }
+        .content {
+            width: 100%;
+            text-align: center;
+        }
+        /* Definir estilos para tabelas e imagens */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid black;
+            padding: 3px 0px 0px 0px;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+        }
+        h1 {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="content">
+        <table>
+            <tr>
+                <th width="3cm"><img src="static/images/logo2gac.png" width="2.5cm" height="3cm"></th>
+                <th>
+                    MINISTÉRIO DA DEFESA<br>
+                    EXÉRCITO BRASILEIRO<br>
+                    CMSE – 2ª DE – 11ª Bda Inf Mec<br>
+                    2º GRUPO DE ARTILHARIA DE CAMPANHA<br>
+                    REGIMENTO DEODORO
+                </th>
+                <th width="3cm"><img src="static/images/logo11bda.png" width="2.5cm" height="3cm"></th>
+            </tr>
+        </table>
+        <h1>PLANO DE EMBARQUE - OP {{ plano_embarque.atividade.nome.upper }}</h1>
+        <table>
+            <tr>
+                <th width="1.5cm">2º GAC</th>
+                <th colspan="5">
+                    PLANO DE EMBARQUE EM VIATURA
+                </th>
+                <th width="1.5cm">
+                    VISTO<br>
+                    _______<br>
+                    S4
+                </th>
+            </tr>
+            <tr>
+                <th width="1.5cm">ORDEM</th>
+                <th width="5cm">
+                    CÓDIGO
+                </th>
+                <th width="3cm">
+                    VIATURA
+                </th>
+                <th width="3cm">
+                    INDICATIVO
+                </th>
+                <th>
+                    MOTORISTA
+                </th>
+                <th>
+                    CHEFE
+                </th>
+                <th width="1.5cm">
+                    Qnt Mil
+                </th>
+            </tr>
+            {% for plano in pl_emb_vtr %}
+                <tr>
+                    <td width="1.5cm">{{ plano.nr_vtr }}</td>
+                    <td width="5cm">
+                        {{ plano.final_dslc }}
+                    </td>
+                    <td width="3cm">
+                        {{ plano.viatura.dados_tecnicos.classificacao }}
+                    </td>
+                    <td width="3cm">
+                        {{ plano.viatura.patrimonio }}
+                    </td>
+                    <td>
+                        {{ plano.motorista.passageiro.operacional.militar.nome_guerra.upper }}
+                    </td>
+                    <td>
+                        {{ plano.chefe.passageiro.operacional.militar.nome_guerra.upper }}
+                    </td>
+                    <td width="1.5cm">
+                        {{ plano.passageiro.all.count }}
+                    </td>
+                </tr>
+            {% endfor %}
+            <tr>
+                <td colspan="6"><b>TOTAL</b></td>
+                <td width="1.5cm">{{ efetivo }}</td>
+            </tr>
+        </table>
+    </div>
+</body>
+</html>

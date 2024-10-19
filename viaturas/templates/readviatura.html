@@ -1,0 +1,121 @@
+{% extends 'base.html' %}
+{% block titulo %}
+Viaturas
+{% endblock %}
+{% block head %}
+<script>
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+    })
+</script>
+{% endblock %}
+{% block main %}
+{% include 'topbar.html' %}
+<div class="row">
+    <div class="col-3">
+        {% include 'sidebarlog.html' %}
+    </div>
+    <div class="col-9">
+        <div class="col-lg-12 mx-auto p-4 py-md-5">
+            <header class="d-flex align-items-center pb-3 mb-5 border-bottom">
+                <div>
+                    <a href="/" class="d-flex align-items-center text-body-emphasis text-decoration-none">
+                        <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"></use></svg>
+                        <span class="fs-4">Resumo Viaturas - {{ request.user.pessoa.militar.subunidade.esc_sup.abreviatura }}</span>
+                    </a>
+                </div>
+
+            </header>
+
+            <table class="text-center table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Viatura Tipo</th>
+                        <th>Disponível</th>
+                        <th>Disp. Restrição</th>
+                        <th>Indisponível</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th>Vtr Op</th>
+                        <td>{{ object_list.vtr_op.disponivel.count }}</td>
+                        <td>{{ object_list.vtr_op.disp_restr.count }}</td>
+                        <td>{{ object_list.vtr_op.indisponivel.count }}</td>
+                        <td>{{ object_list.vtr_op.count }}</td>
+                    </tr>
+                    <tr>
+                        <th>Vtr Adm</th>
+                        <td>{{ object_list.disponivel.vtr_adm.count }}</td>
+                        <td>{{ object_list.disp_restr.vtr_adm.count }}</td>
+                        <td>{{ object_list.indisponivel.vtr_adm.count }}</td>
+                        <td>{{ object_list.vtr_adm.count }}</td>
+                    </tr>
+                    <tr>
+                        <th>Total</th>
+                        <td>{{ object_list.disponivel.count }}</td>
+                        <td>{{ object_list.disp_restr.count }}</td>
+                        <td>{{ object_list.indisponivel.count }}</td>
+                        <td>{{ object_list.count }}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <br>
+            <br>
+
+            <header class="d-flex align-items-center pb-3 mb-5 border-bottom">
+                <div>
+                    <a href="/" class="d-flex align-items-center text-body-emphasis text-decoration-none">
+                        <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"></use></svg>
+                        <span class="fs-4">Lista de Viaturas - {{ request.user.pessoa.militar.subunidade.esc_sup.abreviatura }}</span>
+                    </a>
+                </div>
+
+            </header>
+
+            <table class="text-center table table-bordered">
+                <div class="text-end">
+                    <a href="{% url 'viaturas:createviatura' %}">
+                        <button type="button" class="btn btn-outline-info">Nova</button>
+                    </a>
+                    <br>
+                    <br>
+                </div>
+                <thead>
+                    <tr>
+                        <th scope="col">Classificação</th>
+                        <th scope="col">Marca</th>
+                        <th scope="col">Modelo</th>
+                        <th scope="col">Placa</th>
+                        <th scope="col">Nr Patrimônio</th>
+                        <th scope="col">Situação</th>
+                        <th scope="col">Subunidade</th>
+                        <th scope="col">Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for viatura in object_list %}
+                        <tr>
+                            <td>{{ viatura.dados_tecnicos.classificacao }}</td>
+                            <td>{{ viatura.marca }}</td>
+                            <td>{{ viatura.modelo }}</td>
+                            <td>{{ viatura.placa }}</td>
+                            <td><a href="{% url 'viaturas:detailviatura' viatura.id %}">{{ viatura.patrimonio }}</a></td>
+                            <td>{{ viatura.disponibilidade.situacao }}</td>
+                            <td>{{ viatura.subunidade.abreviatura }}</td>
+                            <td>
+                                <div style="display: flex;">
+                                    ---
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% include 'footer.html' %}
+{% endblock %}
+

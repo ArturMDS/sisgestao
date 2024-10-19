@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block titulo %}
+Acesso Negado
+{% endblock %}
+{% block head %}
+    <link rel="stylesheet" href="{% static 'css/signin.css' %}" />
+{% endblock %}
+{% block main %}
+
+<div class="text-center">
+    <img class="mb-4" src="{% static 'images/acessonegado.png' %}" alt="" width="500" height="500">
+</div>
+
+{% endblock %}

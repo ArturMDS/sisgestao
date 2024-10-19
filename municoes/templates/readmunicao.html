@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% block titulo %}
+Munições
+{% endblock %}
+{% block main %}
+{% include 'topbar.html' %}
+<div class="row">
+    <div class="col-3">
+        {% include 'sidebarlog.html' %}
+    </div>
+    <div class="col-9">
+        <div class="col-lg-8 mx-auto p-4 py-md-5">
+            <header class="d-flex align-items-center pb-3 mb-5 border-bottom">
+                <a href="/" class="d-flex align-items-center text-body-emphasis text-decoration-none">
+                    <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"></use></svg>
+                    <span class="fs-4">Munições</span>
+                </a>
+            </header>
+            <table class="table">
+                <div class="text-end">
+                    <a href="{% url 'municoes:createmunicao' %}">
+                        <button type="button" class="btn btn-outline-info">Novo</button>
+                    </a>
+                    <br>
+                    <br>
+                </div>
+                <thead>
+                    <tr>
+                        <th scope="col">Classificação</th>
+                        <th scope="col">Tipo</th>
+                        <th scope="col">Lote</th>
+                        <th scope="col">Quantidade</th>
+                        <th scope="col">Cód. Virola</th>
+                        <th scope="col">Vencimento</th>
+                        <th scope="col">Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for municao in object_list %}
+                    <tr>
+                        <th scope="row">{{ municao.classificacao }}</th>
+                        <td>{{ municao.tipo }}</td>
+                        <td>{{ municao.lote }}</td>
+                        <td>{{ municao.quantidade }}</td>
+                        <td>{{ municao.codigo_virola }}</td>
+                        <td>{{ municao.vencimento }}</td>
+                        <td>
+                            <form action="{% url 'municoes:createconsumo' %}" method="get">
+                                {% csrf_token %}
+                                <fieldset>
+                                    <input type="hidden" name="municao_id" value="{{ municao.id }}">
+                                    <button type="submit" class="btn btn-outline-warning"
+                                            data-toggle="tooltip"
+                                            data-placement="top"
+                                            title="Registrar consumo">
+                                        <i class="bi bi-activity"></i>
+                                    </button>
+                                </fieldset>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% include 'footer.html' %}
+{% endblock %}
+

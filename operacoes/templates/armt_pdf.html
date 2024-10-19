@@ -1,0 +1,112 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        @page {
+            size: A4 landscape;  /* Define o tamanho da página como A4 em orientação paisagem */
+            margin: 1cm;  /* Define a margem da página */
+        }
+        body {
+            font-family: Calibri;
+            font-size: 0.3cm;
+        }
+        .content {
+            width: 100%;
+            text-align: center;
+        }
+        /* Definir estilos para tabelas e imagens */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid black;
+            padding: 3px 0px 0px 0px;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+        }
+        h1 {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="content">
+        <table>
+            <tr>
+                <th width="3cm"><img src="static/images/logo2gac.png" width="2.5cm" height="3cm"></th>
+                <th>
+                    MINISTÉRIO DA DEFESA<br>
+                    EXÉRCITO BRASILEIRO<br>
+                    CMSE – 2ª DE – 11ª Bda Inf Mec<br>
+                    2º GRUPO DE ARTILHARIA DE CAMPANHA<br>
+                    REGIMENTO DEODORO
+                </th>
+                <th width="3cm"><img src="static/images/logo11bda.png" width="2.5cm" height="3cm"></th>
+            </tr>
+        </table>
+        <h1>ARMAMENTO - {{ atividade.nome.upper }}</h1>
+        <table>
+            <tr>
+                <th width="1.5cm">P/G</th>
+                <th>NOME DE GUERRA</th>
+                <th>FUZIL</th>
+                <th>MUN FZ</th>
+                <th>NR FZ</th>
+                <th>PISTOLA</th>
+                <th>MUN PST</th>
+                <th>NR PST</th>
+            </tr>
+            {% for orgao in atividade.orgao.all %}
+                {% for operacional in orgao.operacional.all %}
+                    <tr>
+                        <td width="1.5cm">{{ operacional.militar.posto_grad }}</td>
+                        <td>{{ operacional.militar.nome_guerra.upper }}</td>
+                        {% if operacional.arma.all.fuzil %}
+                            <td>Sim</td>
+                            {% if operacional.arma.all.fuzil_get.municao %}
+                                <td>20</td>
+                            {% else %}
+                                <td>0</td>
+                            {% endif %}
+                            <td>{{ operacional.arma.all.fuzil_get.armamento.nr_serie }}</td>
+                        {% else %}
+                            <td>Desarmado</td>
+                            <td>Desarmado</td>
+                            <td>Desarmado</td>
+                        {% endif %}
+                        {% if operacional.arma.all.pistola %}
+                            <td>Sim</td>
+                            {% if operacional.arma.all.pistola_get.municao %}
+                                <td>15</td>
+                            {% else %}
+                                <td>0</td>
+                            {% endif %}
+                            <td>{{ operacional.arma.all.pistola_get.armamento.nr_serie }}</td>
+                        {% else %}
+                            <td>Desarmado</td>
+                            <td>Desarmado</td>
+                            <td>Desarmado</td>
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+            {% endfor %}
+            <tr>
+                <td colspan="2"><b>QUANTIDADE FUZIS</b></td>
+                <td colspan="2"><b>{{ total_fz }}</b></td>
+                <td colspan="2"><b>QUANTIDADE PISTOLAS</b></td>
+                <td colspan="2"><b>{{ total_pst }}</b></td>
+            </tr>
+            <tr>
+                <td colspan="2"><b>QTDE MUN FUZIL</b></td>
+                <td colspan="2"><b>{{ qtde_mun_fz }}</b></td>
+                <td colspan="2"><b>QTDE MUN PISTOLA</b></td>
+                <td colspan="2"><b>{{ qtde_mun_pst }}</b></td>
+            </tr>
+        </table>
+    </div>
+</body>
+</html>

@@ -1,0 +1,155 @@
+{% extends 'base.html' %}
+{% block titulo %}
+Op {{ object.nome }}
+{% endblock %}
+{% block main %}
+{% include 'topbar.html' %}
+<div class="row">
+    <div class="col-3">
+        {% include 'sidebarop.html' %}
+    </div>
+    <div class="col-9">
+        <div class="col-lg-12 mx-auto p-4 py-md-5">
+            <header class="d-flex align-items-center pb-3 mb-5 border-bottom">
+                <div>
+                    <a href="/" class="d-flex align-items-center text-body-emphasis text-decoration-none">
+                        <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"></use></svg>
+                        <span class="fs-4">PESSOAL - Operação {{ operacoes.first.nome.upper }} - {{ request.user.pessoa.militar.subunidade.esc_sup.abreviatura }}</span>
+                    </a>
+                </div>
+            </header>
+            <div class="row justify-content-between">
+                <div class="col-4">
+                    <form method="get" action="{% url 'operacoes:download_participantes_pdf' %}">
+                        {% csrf_token %}
+                        <fieldset>
+                            <input type="hidden" name="pk_atv" value="{{ object_list.first.orgao.atividade.id }}">
+                            <button type="submit" class="btn btn-outline-success"><i class="bi bi-file-earmark-arrow-down-fill"></i></button>
+                        </fieldset>
+                    </form>
+                </div>
+            </div>
+            <br>
+            <header class="d-flex align-items-center pb-3 mb-5 border-bottom">
+                <div>
+                    <a href="/" class="d-flex align-items-center text-body-emphasis text-decoration-none">
+                        <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"></use></svg>
+                        <span class="fs-4">Quadro Resumo</span>
+                    </a>
+                </div>
+            </header>
+            <table class="text-center table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Posto/Grad</th>
+                        <th>Efetivo</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><b>Oficiais</b></td>
+                        <td>{{ oficiais }}</td>
+                    </tr>
+                    <tr>
+                        <td>Cel</td>
+                        <td>{{ cel }}</td>
+                    </tr>
+                    <tr>
+                        <td>Ten Cel</td>
+                        <td>{{ tc }}</td>
+                    </tr>
+                    <tr>
+                        <td>Maj</td>
+                        <td>{{ maj }}</td>
+                    </tr>
+                    <tr>
+                        <td>Cap</td>
+                        <td>{{ cap }}</td>
+                    </tr>
+                    <tr>
+                        <td>1º Ten</td>
+                        <td>{{ ten1 }}</td>
+                    </tr>
+                    <tr>
+                        <td>2º Ten</td>
+                        <td>{{ ten2 }}</td>
+                    </tr>
+                    <tr>
+                        <td>Asp Of</td>
+                        <td>{{ asp }}</td>
+                    </tr>
+                    <tr>
+                        <td><b>ST e Sgt</b></td>
+                        <td>{{ st_sgt }}</td>
+                    </tr>
+                    <tr>
+                        <td>ST</td>
+                        <td>{{ st }}</td>
+                    </tr>
+                    <tr>
+                        <td>1º Sgt</td>
+                        <td>{{ sgt1 }}</td>
+                    </tr>
+                    <tr>
+                        <td>2º Sgt</td>
+                        <td>{{ sgt2 }}</td>
+                    </tr>
+                    <tr>
+                        <td>3º Sgt</td>
+                        <td>{{ sgt3 }}</td>
+                    </tr>
+                    <tr>
+                        <td><b>Cb e Sd</b></td>
+                        <td>{{ cb_sd }}</td>
+                    </tr>
+                    <tr>
+                        <td>Cb</td>
+                        <td>{{ cb }}</td>
+                    </tr>
+                    <tr>
+                        <td>Sd NB</td>
+                        <td>{{ sd_nb }}</td>
+                    </tr>
+                    <tr>
+                        <td>Sd EV</td>
+                        <td>{{ sd_ev }}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <br>
+            <table class="text-center table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Posto/Grad</th>
+                        <th>Nome de Guerra</th>
+                        <th>Identidade</th>
+                        <th>CPF</th>
+                        <th>Subunidade</th>
+                        <th>Celular</th>
+                        <th>Email</th>
+                        <th>Contato</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for operac in object_list %}
+                        <tr>
+                            <td>{{ operac.militar.posto_grad }}</td>
+                            <td>{{ operac.militar.nome_guerra }}</td>
+                            <td>{{ operac.militar.identidade }}</td>
+                            <td>{{ operac.militar.pessoa.documentos.cpf }}</td>
+                            <td>{{ operac.militar.subunidade.abreviatura }}</td>
+                            <td>{{ operac.militar.pessoa.celular.first.celular }}</td>
+                            <td>{{ operac.militar.pessoa.email.first.email }}</td>
+                            <td>{{ operac.militar.pessoa.telefone.first.telefone }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <br>
+            <br>
+        </div>
+    </div>
+</div>
+{% include 'footer.html' %}
+{% endblock %}
+

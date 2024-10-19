@@ -1,0 +1,123 @@
+{% extends 'base.html' %}
+{% block titulo %}
+Op {{ object.nome }}
+{% endblock %}
+{% block main %}
+{% include 'topbar.html' %}
+<div class="row">
+    <div class="col-3">
+        {% include 'sidebarop.html' %}
+    </div>
+    <div class="col-9">
+        <div class="col-lg-12 mx-auto p-4 py-md-5">
+            <header class="d-flex align-items-center pb-3 mb-5 border-bottom">
+                <div class="row">
+                    <div class="col-11">
+                        <a href="/" class="d-flex align-items-center text-body-emphasis text-decoration-none">
+                            <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"></use></svg>
+                            <span class="fs-4">Armamentos - Operação {{ object.nome.upper }} - {{ request.user.pessoa.militar.subunidade.esc_sup.abreviatura }}</span>
+                        </a>
+                    </div>
+                    <div class="col-1">
+                        <form method="get" action="{% url 'operacoes:download_armt_pdf' %}">
+                            {% csrf_token %}
+                            <fieldset>
+                                <input type="hidden" name="pk_atv" value="{{ object.id }}">
+                                <button type="submit" class="btn btn-outline-success"><i class="bi bi-file-earmark-arrow-down-fill"></i></button>
+                            </fieldset>
+                        </form>
+                    </div>
+                </div>
+                <div>
+
+                </div>
+
+            </header>
+            <table class="text-center table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Órgão</th>
+                        <th>Subunidade</th>
+                        <th>Posto/Grad</th>
+                        <th>Nome de Guerra</th>
+                        <th>Fuzil</th>
+                        <th>Mun Fz</th>
+                        <th>Nr Fz</th>
+                        <th>Pistola</th>
+                        <th>Mun Pst</th>
+                        <th>Nr Pst</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for orgao in object.orgao.all %}
+                        {% if orgao.operacional.all %}
+                            <tr>
+                                <td rowspan="{{ orgao.operacional.count }}" class="text-center align-middle">{{ orgao.nome }}</td>
+                                <td rowspan="{{ orgao.operacional.count }}" class="text-center align-middle">{{ orgao.subunidade.abreviatura }}</td>
+                            {% for operacional in orgao.operacional.all %}
+                                <td>{{ operacional.militar.posto_grad }}</td>
+                                <td>{{ operacional.militar.nome_guerra.upper }}</td>
+                                {% if operacional.arma.all.fuzil %}
+                                    <td><a href="{% url 'operacoes:delete_armt' operacional.arma.all.fuzil_get.id %}"><i class="bi bi-check2-circle"></i></a></td>
+                                    {% for fz in operacional.arma.all.fuzil %}
+                                        {% if fz.municao %}
+                                <td><a href="{% url 'operacoes:update_mun_armt' operacional.arma.all.fuzil_get.id %}">{{ fz.qtde_mun }}</a></td>
+                                        {% else %}
+                                            <td><a href="{% url 'operacoes:update_mun_armt' operacional.arma.all.fuzil_get.id %}"><i class="bi bi-x-circle-fill"></i></a></td>
+                                        {% endif %}
+                                        {% if fz.armamento %}
+                                            <td>{{ fz.armamento.nr_serie }}</td>
+                                        {% else %}
+                                            <td><a href="{% url 'operacoes:updatearma' operacional.arma.fuzil_get.id %}" class="btn btn-outline-warning">Definir</a></td>
+                                        {% endif %}
+                                    {% endfor %}
+                                {% else %}
+                                    <td><a href="{% url 'operacoes:create_fz' operacional.id %}"><i class="bi bi-x-circle-fill danger"></i></a></td>
+                                    <td>Desarmado</td>
+                                    <td>Desarmado</td>
+                                {% endif %}
+                                {% if operacional.arma.all.pistola %}
+                                    <td><a href="{% url 'operacoes:delete_armt' operacional.arma.all.pistola_get.id %}"><i class="bi bi-check2-circle"></i></a></td>
+                                    {% for pst in operacional.arma.all.pistola %}
+                                        {% if pst.municao %}
+                                <td><a href="{% url 'operacoes:update_mun_armt' operacional.arma.all.pistola_get.id %}">{{ pst.qtde_mun }}</a></td>
+                                        {% else %}
+                                            <td><a href="{% url 'operacoes:update_mun_armt' operacional.arma.all.pistola_get.id %}"><i class="bi bi-x-circle-fill"></i></a></td>
+                                        {% endif %}
+                                        {% if pst.armamento %}
+                                            <td>{{ pst.armamento.nr_serie }}</td>
+                                        {% else %}
+                                            <td><a href="{% url 'operacoes:updatearma' operacional.arma.pistola_get.id %}" class="btn btn-outline-warning">Definir</a></td>
+                                        {% endif %}
+                                    {% endfor %}
+                                {% else %}
+                                    <td><a href="{% url 'operacoes:create_pst' operacional.id %}"><i class="bi bi-x-circle-fill danger"></i></a></td>
+                                    <td>Desarmado</td>
+                                    <td>Desarmado</td>
+                                {% endif %}
+                            </tr>
+                            {% endfor %}
+                        {% endif %}
+                    {% endfor %}
+                    <tr>
+                        <td colspan="3"><b>Quantidade Total Fuzis</b></td>
+                        <td colspan="2">{{ total_fz }}</td>
+                        <td colspan="3"><b>Quantidade Total Pistolas</b></td>
+                        <td colspan="2">{{ total_pst }}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="3"><b>Quantidade Munições Fuzil</b></td>
+                        <td colspan="2">{{ qtde_mun_fz }}</td>
+                        <td colspan="3"><b>Quantidade Munições Pistola</b></td>
+                        <td colspan="2">{{ qtde_mun_pst }}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <br>
+            <br>
+        </div>
+    </div>
+</div>
+{% include 'footer.html' %}
+{% endblock %}
+

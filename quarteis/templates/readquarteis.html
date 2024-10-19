@@ -1,0 +1,187 @@
+{% extends 'base.html' %}
+{% block titulo %}
+Unidades
+{% endblock %}
+{% block main %}
+{% include 'topbar.html' %}
+<div class="row">
+    <div class="col-3">
+        {% include 'sidebarpessoal.html' %}
+    </div>
+    <div class="col-9">
+        <div class="col-lg-8 mx-auto p-4 py-md-5">
+            <header class="d-flex align-items-center pb-3 mb-5 border-bottom">
+                <a href="/" class="d-flex align-items-center text-body-emphasis text-decoration-none">
+                    <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"></use></svg>
+                    <span class="fs-4">Comandos Militares</span>
+                </a>
+            </header>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">Nome</th>
+                        <th scope="col">Abreviatura</th>
+                        <th scope="col">Nome Histórico</th>
+                        <th scope="col">Cidade</th>
+                        <th scope="col">Estado</th>
+                        <th scope="col">Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for comando in comandos %}
+                    <tr>
+                        <th scope="row">{{ comando.nome }}</th>
+                        <td>{{ comando.abreviatura }}</td>
+                        <td>{{ comando.nome_historico }}</td>
+                        <td>{{ comando.cidade }}</td>
+                        <td>{{ comando.estado }}</td>
+                        <td>###TODO###</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="col-9">
+        <div class="col-lg-8 mx-auto p-4 py-md-5">
+            <header class="d-flex align-items-center pb-3 mb-5 border-bottom">
+                <a href="/" class="d-flex align-items-center text-body-emphasis text-decoration-none">
+                    <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"></use></svg>
+                    <span class="fs-4">Grandes Comandos Militares</span>
+                </a>
+            </header>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">Nome</th>
+                        <th scope="col">Abreviatura</th>
+                        <th scope="col">Escalão Superior</th>
+                        <th scope="col">Nome Histórico</th>
+                        <th scope="col">Cidade</th>
+                        <th scope="col">Estado</th>
+                        <th scope="col">Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for grcomando in grcomandos %}
+                    <tr>
+                        <th scope="row">{{ grcomando.nome }}</th>
+                        <td>{{ grcomando.abreviatura }}</td>
+                        <td>{{ grcomando.esc_sup }}</td>
+                        <td>{{ grcomando.nome_historico }}</td>
+                        <td>{{ grcomando.cidade }}</td>
+                        <td>{{ grcomando.estado }}</td>
+                        <td>###TODO###</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="col-9">
+        <div class="col-lg-8 mx-auto p-4 py-md-5">
+            <header class="d-flex align-items-center pb-3 mb-5 border-bottom">
+                <a href="/" class="d-flex align-items-center text-body-emphasis text-decoration-none">
+                    <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"></use></svg>
+                    <span class="fs-4">Grandes Unidades</span>
+                </a>
+            </header>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">Nome</th>
+                        <th scope="col">Abreviatura</th>
+                        <th scope="col">Escalão Superior</th>
+                        <th scope="col">Nome Histórico</th>
+                        <th scope="col">Cidade</th>
+                        <th scope="col">Estado</th>
+                        <th scope="col">Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for grun in gruns %}
+                    <tr>
+                        <th scope="row">{{ grun.nome }}</th>
+                        <td>{{ grun.abreviatura }}</td>
+                        <td>{{ grun.esc_sup }}</td>
+                        <td>{{ grun.nome_historico }}</td>
+                        <td>{{ grun.cidade }}</td>
+                        <td>{{ grun.estado }}</td>
+                        <td>###TODO###</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="col-9">
+        <div class="col-lg-8 mx-auto p-4 py-md-5">
+            <header class="d-flex align-items-center pb-3 mb-5 border-bottom">
+                <a href="/" class="d-flex align-items-center text-body-emphasis text-decoration-none">
+                    <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"></use></svg>
+                    <span class="fs-4">Unidades</span>
+                </a>
+            </header>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">Nome</th>
+                        <th scope="col">Abreviatura</th>
+                        <th scope="col">Escalão Superior</th>
+                        <th scope="col">Nome Histórico</th>
+                        <th scope="col">Cidade</th>
+                        <th scope="col">Estado</th>
+                        <th scope="col">Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for unidade in unidades %}
+                    <tr>
+                        <th scope="row">{{ unidade.nome }}</th>
+                        <td>{{ unidade.abreviatura }}</td>
+                        <td>{{ unidade.esc_sup }}</td>
+                        <td>{{ unidade.nome_historico }}</td>
+                        <td>{{ unidade.cidade }}</td>
+                        <td>{{ unidade.estado }}</td>
+                        <td>###TODO###</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="col-9">
+        <div class="col-lg-8 mx-auto p-4 py-md-5">
+            <header class="d-flex align-items-center pb-3 mb-5 border-bottom">
+                <a href="/" class="d-flex align-items-center text-body-emphasis text-decoration-none">
+                    <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"></use></svg>
+                    <span class="fs-4">Subunidades</span>
+                </a>
+            </header>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">Nome</th>
+                        <th scope="col">Abreviatura</th>
+                        <th scope="col">Escalão Superior</th>
+                        <th scope="col">Nome Histórico</th>
+                        <th scope="col">Cidade</th>
+                        <th scope="col">Estado</th>
+                        <th scope="col">Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for subunidade in subunidades %}
+                    <tr>
+                        <th scope="row">{{ subunidade.nome }}</th>
+                        <td>{{ subunidade.abreviatura }}</td>
+                        <td>{{ subunidade.esc_sup }}</td>
+                        <td>{{ subunidade.nome_historico }}</td>
+                        <td>{{ subunidade.cidade }}</td>
+                        <td>{{ subunidade.estado }}</td>
+                        <td>###TODO###</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% include 'footer.html' %}
+{% endblock %}
+

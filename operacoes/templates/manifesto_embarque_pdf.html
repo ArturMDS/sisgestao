@@ -1,0 +1,134 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        @page {
+            size: A4 landscape;  /* Define o tamanho da página como A4 em orientação paisagem */
+            margin: 1cm;  /* Define a margem da página */
+        }
+        body {
+            font-family: Calibri;
+            font-size: 0.3cm;
+        }
+        .content {
+            width: 100%;
+            text-align: center;
+        }
+        /* Definir estilos para tabelas e imagens */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid black;
+            padding: 3px 0px 0px 0px;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+        }
+        h1 {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="content">
+        <table>
+            <tr>
+                <th width="3cm"><img src="static/images/logo2gac.png" width="2.5cm" height="3cm"></th>
+                <th>
+                    MINISTÉRIO DA DEFESA<br>
+                    EXÉRCITO BRASILEIRO<br>
+                    CMSE – 2ª DE – 11ª Bda Inf Mec<br>
+                    2º GRUPO DE ARTILHARIA DE CAMPANHA<br>
+                    REGIMENTO DEODORO
+                </th>
+                <th width="3cm"><img src="static/images/logo11bda.png" width="2.5cm" height="3cm"></th>
+            </tr>
+        </table>
+        <h1>MANIFESTO DE EMBARQUE DE PESSOAL</h1>
+        <table>
+            <tr>
+                <th width="1.5cm" rowspan="3">2º GAC</th>
+                <th colspan="5">
+                    MANIFESTO DE EMBARQUE DE PESSOAL EM VIATURA
+                </th>
+                <th width="1.5cm" rowspan="3">
+                    VISTO<br>
+                    _______<br>
+                    S4
+                </th>
+            </tr>
+            <tr>
+                <th width="12.5cm" colspan="2">MOTORISTA</th>
+                <th>
+                    VIATURA
+                </th>
+                <th width="1.5cm">
+                    NR
+                </th>
+                <th width="4cm">
+                    INDICATIVO
+                </th>
+            </tr>
+            <tr>
+                <th width="1.5cm">{{ manifesto_embarque.motorista.passageiro.operacional.militar.posto_grad }}</th>
+                <th width="11cm">
+                    {{ manifesto_embarque.motorista.passageiro.operacional.militar.pessoa.nome_completo.upper }}
+                </th>
+                <th>
+                    {{ manifesto_embarque.viatura.dados_tecnicos.classificacao }}
+                </th>
+                <th>
+                    {{ manifesto_embarque.nr_vtr }}
+                </th>
+                <th>
+                    {{ manifesto_embarque.viatura.patrimonio }}
+                </th>
+            </tr>
+            <tr>
+                <th width="1.5cm">Nr</th>
+                <th width="1.5cm">
+                    P/G
+                </th>
+                <th width="11cm">
+                    NOME COMPLETO
+                </th>
+                <th colspan="2">
+                    NOME DE GUERRA
+                </th>
+                <th>
+                    IDENTIDADE
+                </th>
+                <th width="1.5cm">FUNÇÃO</th>
+            </tr>
+            {% for passageiro in pas %}
+                <tr>
+                    <td width="1.5cm">{{ passageiro.assento_poltrona }}</td>
+                    <td width="1.5cm">
+                        {{ passageiro.operacional.militar.posto_grad }}
+                    </td>
+                    <td width="11cm">
+                        {{ passageiro.operacional.militar.pessoa.nome_completo.upper }}
+                    </td>
+                    <td colspan="2">
+                        {{ passageiro.operacional.militar.nome_guerra.upper }}
+                    </td>
+                    <td>
+                        {{ passageiro.operacional.militar.identidade }}
+                    </td>
+                    <td width="1.5cm">
+                        {{ passageiro.operacional.funcao }}
+                    </td>
+                </tr>
+            {% endfor %}
+            <tr>
+                <td colspan="6"><b>TOTAL</b></td>
+                <td width="1.5cm">{{ manifesto_embarque.passageiro.all.count }}</td>
+            </tr>
+        </table>
+    </div>
+</body>
+</html>

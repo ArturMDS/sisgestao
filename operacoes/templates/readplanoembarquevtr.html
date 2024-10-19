@@ -1,0 +1,223 @@
+{% extends 'base.html' %}
+{% block titulo %}
+Op {{ object.plano_embarque.atividade.nome }}
+{% endblock %}
+{% block main %}
+{% include 'topbar.html' %}
+<div class="row">
+    <div class="col-3">
+        {% include 'sidebarop.html' %}
+    </div>
+    <div class="col-9">
+        <div class="col-lg-12 mx-auto p-4 py-md-5">
+            <header class="d-flex align-items-center pb-3 mb-5 border-bottom">
+                <div>
+                    <a href="/" class="d-flex align-items-center text-body-emphasis text-decoration-none">
+                        <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"></use></svg>
+                        <span class="fs-4">Plano de Embarque - {{ object.viatura.dados_tecnicos.classificacao }} {{ object.viatura.patrimonio }}</span>
+                    </a>
+                </div>
+
+            </header>
+            <div class="row align-items-start">
+                <div class="col">
+                    {% if not object.chefe %}
+                        <form method="get" action="{% url 'operacoes:createchefevtr' %}">
+                            {% csrf_token %}
+                            <fieldset>
+                                <input type="hidden" name="id_pev" value="{{ object.id }}">
+                                <button type="submit" class="btn btn-outline-info">Inserir Chefe</button>
+                            </fieldset>
+                        </form>
+                    {% endif %}
+                </div>
+                <div class="col">
+                    {% if not object.motorista %}
+                        <form method="get" action="{% url 'operacoes:createmotovtr' %}">
+                            {% csrf_token %}
+                            <fieldset>
+                                <input type="hidden" name="id_pev" value="{{ object.id }}">
+                                <button type="submit" class="btn btn-outline-info">Inserir Motorista</button>
+                            </fieldset>
+                        </form>
+                    {% endif %}
+                </div>
+                <div class="col">
+                    <form method="get" action="{% url 'operacoes:createpassagvtr' %}">
+                        {% csrf_token %}
+                        <fieldset>
+                            <input type="hidden" name="id_pev" value="{{ object.id }}">
+                            <button type="submit" class="btn btn-outline-info">Inserir Efetivo</button>
+                        </fieldset>
+                    </form>
+                </div>
+            </div>
+            <br>
+            <div class="row justify-content-md-center">
+                <div class="col-md-auto">
+                    <form method="get" action="{% url 'operacoes:download_manemb_pdf' %}">
+                        {% csrf_token %}
+                        <fieldset>
+                            <input type="hidden" name="id_manemb" value="{{ object.id }}">
+                            <button type="submit" class="btn btn-outline-success"><i class="bi bi-file-earmark-arrow-down-fill"></i></button>
+                        </fieldset>
+                    </form>
+                </div>
+            </div>
+            {% if object.chefe %}
+                <header class="d-flex align-items-center pb-3 mb-5 border-bottom">
+                    <div>
+                        <a href="/" class="d-flex align-items-center text-body-emphasis text-decoration-none">
+                            <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"></use></svg>
+                            <span class="fs-4">Chefe</span>
+                        </a>
+                    </div>
+                </header>
+                <table class="text-center table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Posto/Grad</th>
+                            <th>Nome Completo</th>
+                            <th>Nome de Guerra</th>
+                            <th>Identidade</th>
+                            <th>CPF</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>{{ object.chefe.passageiro.operacional.militar.posto_grad }}</td>
+                            <td>{{ object.chefe.passageiro.operacional.militar.pessoa.nome_completo }}</td>
+                            <td>{{ object.chefe.passageiro.operacional.militar.nome_guerra.upper }}</td>
+                            <td>{{ object.chefe.passageiro.operacional.militar.identidade }}</td>
+                            <td>{{ object.chefe.passageiro.operacional.militar.pessoa.documentos.cpf }}</td>
+                            <td>
+                                <div class="row">
+                                    <div class="col">
+                                        <a href="{% url 'operacoes:updatechefe' object.chefe.id %}">
+                                            <button type="submit" class="btn btn-outline-warning"><i class="bi bi-arrow-clockwise"></i></button>
+                                        </a>
+                                    </div>
+                                    <div class="col">
+                                        <a href="{% url 'operacoes:delete_chefe' object.chefe.id %}">
+                                            <button type="submit" class="btn btn-outline-danger"><i class="bi bi-trash"></i></button>
+                                        </a>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <br>
+                <br>
+            {% endif %}
+            {% if object.motorista %}
+                <header class="d-flex align-items-center pb-3 mb-5 border-bottom">
+                    <div>
+                        <a href="/" class="d-flex align-items-center text-body-emphasis text-decoration-none">
+                            <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"></use></svg>
+                            <span class="fs-4">Motorista</span>
+                        </a>
+                    </div>
+                </header>
+                <table class="text-center table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Posto/Grad</th>
+                            <th>Nome Completo</th>
+                            <th>Nome de Guerra</th>
+                            <th>Identidade</th>
+                            <th>CPF</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>{{ object.motorista.passageiro.operacional.militar.posto_grad }}</td>
+                            <td>{{ object.motorista.passageiro.operacional.militar.pessoa.nome_completo }}</td>
+                            <td>{{ object.motorista.passageiro.operacional.militar.nome_guerra.upper }}</td>
+                            <td>{{ object.motorista.passageiro.operacional.militar.identidade }}</td>
+                            <td>{{ object.motorista.passageiro.operacional.militar.pessoa.documentos.cpf }}</td>
+                            <td>
+                                <div class="row">
+                                    <div class="col">
+                                        <a href="{% url 'operacoes:updatemotorista' object.motorista.id %}">
+                                            <button type="submit" class="btn btn-outline-warning"><i class="bi bi-arrow-clockwise"></i></button>
+                                        </a>
+                                    </div>
+                                    <div class="col">
+                                        <a href="{% url 'operacoes:delete_motorista' object.motorista.id %}">
+                                            <button type="submit" class="btn btn-outline-danger"><i class="bi bi-trash"></i></button>
+                                        </a>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <br>
+                <br>
+            {% endif %}
+            {% if object.passageiro.all %}
+                <header class="d-flex align-items-center pb-3 mb-5 border-bottom">
+                    <div>
+                        <a href="/" class="d-flex align-items-center text-body-emphasis text-decoration-none">
+                            <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"></use></svg>
+                            <span class="fs-4">Passageiros</span>
+                        </a>
+                    </div>
+                </header>
+                <table class="text-center table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Assento</th>
+                            <th>Posto/Grad</th>
+                            <th>Nome Completo</th>
+                            <th>Nome de Guerra</th>
+                            <th>Identidade</th>
+                            <th>CPF</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for passageiro in object.passageiro.all %}
+                            <tr>
+                                <td>{{ passageiro.assento_poltrona }}</td>
+                                <td>{{ passageiro.operacional.militar.posto_grad }}</td>
+                                <td>{{ passageiro.operacional.militar.pessoa.nome_completo }}</td>
+                                <td>{{ passageiro.operacional.militar.nome_guerra.upper }}</td>
+                                <td>{{ passageiro.operacional.militar.identidade }}</td>
+                                <td>{{ passageiro.operacional.militar.pessoa.documentos.cpf }}</td>
+                                <td>
+                                    <div class="row">
+                                        <div class="col">
+                                            <form method="get" action="{% url 'operacoes:updatepassageiro' passageiro.id %}">
+                                                {% csrf_token %}
+                                                <fieldset>
+                                                    <input type="hidden" name="id_pas" value="{{ passageiro.operacional.id }}">
+                                                    <button type="submit" class="btn btn-outline-warning"><i class="bi bi-arrow-clockwise"></i></button>
+                                                </fieldset>
+                                            </form>
+                                        </div>
+                                        <div class="col">
+                                            <a href="{% url 'operacoes:delete_passageiro' passageiro.id %}">
+                                                <button type="submit" class="btn btn-outline-danger"><i class="bi bi-trash"></i></button>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <br>
+                <br>
+            {% endif %}
+            <a href="{% url 'operacoes:readplanoembarque' object.plano_embarque.id %}"><button type="button" class="btn btn-outline-warning">
+                    Voltar</button></a>
+        </div>
+    </div>
+</div>
+{% include 'footer.html' %}
+{% endblock %}
+

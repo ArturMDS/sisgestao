@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block titulo %}
+Atualizar
+{% endblock %}
+{% block main %}
+{% include 'topbar.html' %}
+<div class="row">
+    <div class="col-3">
+        {% include 'sidebarop.html' %}
+    </div>
+    <div class="col-9">
+        <div class="col-lg-8 mx-auto p-4 py-md-5">
+            <header class="d-flex align-items-center pb-3 mb-5 border-bottom">
+                <a href="/" class="d-flex align-items-center text-body-emphasis text-decoration-none">
+                    <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"></use></svg>
+                    <span class="fs-4">Atualizar Plano de Embarque de Viatura</span>
+                </a>
+            </header>
+            <form method="post" class="form-signin text-center">
+                {% csrf_token %}
+                <h1 class="h3 mb-3 font-weight-normal">Plano de Embarque de Viatura</h1>
+                {{ form|crispy }}
+                <button class="btn btn-primary" type="submit">Atualizar</button>
+                <a href="{% url 'operacoes:readplanoembarque' object.plano_embarque.id %}"><button type="button" class="btn btn-outline-warning">
+                    Voltar</button></a>
+            </form>
+        </div>
+    </div>
+</div>
+{% include 'footer.html' %}
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block titulo %}
+Cadastrar Pneu
+{% endblock %}
+{% block main %}
+{% include 'topbar.html' %}
+<div class="row">
+    <div class="col-3">
+        {% include 'sidebarlog.html' %}
+    </div>
+    <div class="col-9">
+        <div class="col-lg-8 mx-auto p-4 py-md-5">
+            <header class="d-flex align-items-center pb-3 mb-5 border-bottom">
+                <a href="/" class="d-flex align-items-center text-body-emphasis text-decoration-none">
+                    <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"></use></svg>
+                    <span class="fs-4">Cadastrar Verificação Pneu</span>
+                </a>
+            </header>
+            <form method="post" class="form-signin text-center">
+                {% csrf_token %}
+                <h1 class="h3 mb-3 font-weight-normal">Cadastre uma nova verificação de pneu</h1>
+                {{ form|crispy }}
+                <button class="btn btn-primary" type="submit">Cadastrar</button>
+                <a href="{% url 'viaturas:detailviatura' request.GET.viatura_id %}"><button type="button" class="btn btn-outline-warning">
+                    Voltar</button></a>
+            </form>
+        </div>
+    </div>
+</div>
+{% include 'footer.html' %}
+{% endblock %}
+

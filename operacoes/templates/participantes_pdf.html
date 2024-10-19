@@ -1,0 +1,82 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        @page {
+            size: A4 landscape;  /* Define o tamanho da página como A4 em orientação paisagem */
+            margin: 1cm;  /* Define a margem da página */
+        }
+        body {
+            font-family: Calibri;
+            font-size: 0.3cm;
+        }
+        .content {
+            width: 100%;
+            text-align: center;
+        }
+        /* Definir estilos para tabelas e imagens */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid black;
+            padding: 3px 0px 0px 0px;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+        }
+        h1 {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="content">
+        <table>
+            <tr>
+                <th width="3cm"><img src="static/images/logo2gac.png" width="2.5cm" height="3cm"></th>
+                <th>
+                    MINISTÉRIO DA DEFESA<br>
+                    EXÉRCITO BRASILEIRO<br>
+                    CMSE – 2ª DE – 11ª Bda Inf Mec<br>
+                    2º GRUPO DE ARTILHARIA DE CAMPANHA<br>
+                    REGIMENTO DEODORO
+                </th>
+                <th width="3cm"><img src="static/images/logo11bda.png" width="2.5cm" height="3cm"></th>
+            </tr>
+        </table>
+        <h1>RELAÇÃO DOS PARTICIPANTES - {{ atividade.nome.upper }}</h1>
+        <table>
+            <tr>
+                <th width="3cm">ÓRGÃO</th>
+                <th width="1.5cm">EF</th>
+                <th width="1.5cm">P/G</th>
+                <th width="11cm">NOME COMPLETO</th>
+                <th>NOME DE GUERRA</th>
+                <th>IDENTIDADE</th>
+                <th width="4cm">FUNÇÃO</th>
+            </tr>
+            {% for orgao in atividade.orgao.all %}
+                <tr>
+                    <td width="3cm" rowspan="{{ orgao.operacional.count }}" class="text-center align-middle">{{ orgao.nome }}</td>
+                    <td width="1.5cm" rowspan="{{ orgao.operacional.count }}" class="text-center align-middle">{{ orgao.operacional.count}}</td>
+                {% for operacional in orgao.operacional.all %}
+                        <td width="1.5cm">{{ operacional.militar.posto_grad }}</td>
+                        <td width="11cm">{{ operacional.militar.pessoa.nome_completo.upper }}</td>
+                        <td>{{ operacional.militar.nome_guerra.upper }}</td>
+                        <td>{{ operacional.militar.identidade }}</td>
+                        <td width="4cm">{{ operacional.funcao }}</td>
+                    </tr>
+                {% endfor %}
+            {% endfor %}
+            <tr>
+                <td colspan="6"><b>TOTAL</b></td>
+                <td><b>{{ total }}</b></td>
+            </tr>
+        </table>
+    </div>
+</body>
+</html>

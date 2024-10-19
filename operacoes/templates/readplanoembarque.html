@@ -1,0 +1,110 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block titulo %}
+Op {{ object.atividade.nome }}
+{% endblock %}
+{% block main %}
+{% include 'topbar.html' %}
+<div class="row">
+    <div class="col-3">
+        {% include 'sidebarop.html' %}
+    </div>
+    <div class="col-9">
+        <div class="col-lg-12 mx-auto p-4 py-md-5">
+            <header class="d-flex align-items-center pb-3 mb-5 border-bottom">
+                <div>
+                    <a href="/" class="d-flex align-items-center text-body-emphasis text-decoration-none">
+                        <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"></use></svg>
+                        <span class="fs-4">Plano de Embarque - Operação {{ object.atividade.nome.upper }} - {{ request.user.pessoa.militar.subunidade.esc_sup.abreviatura }}</span>
+                    </a>
+                </div>
+            </header>
+            <div class="row justify-content-between">
+                <div class="col-4">
+                    <form method="get" action="{% url 'operacoes:download_plemb_pdf' %}">
+                        {% csrf_token %}
+                        <fieldset>
+                            <input type="hidden" name="id_ple" value="{{ object.id }}">
+                            <button type="submit" class="btn btn-outline-success"><i class="bi bi-file-earmark-arrow-down-fill"></i></button>
+                        </fieldset>
+                    </form>
+                </div>
+                <div class="col-4">
+                    <form method="get" action="{% url 'operacoes:createplembvtr' %}">
+                    {% csrf_token %}
+                        <fieldset>
+                            <input type="hidden" name="id_plemb" value="{{ object.id }}">
+                            <button type="submit" class="btn btn-outline-info">Nova Vtr</button>
+                        </fieldset>
+                    </form>
+                </div>
+            </div>
+            <br>
+            <br>
+            <table class="text-center table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Ord</th>
+                        <th>Nr Patr</th>
+                        <th>Tipo</th>
+                        <th>Dslc</th>
+                        <th>Motorista</th>
+                        <th>Chefe</th>
+                        <th>Ef</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for vtr in object.plano_embarque_vtr.all %}
+                        <tr>
+                            <td>{{ vtr.nr_vtr }}</td>
+                            <td><a href="{% url 'operacoes:readplanoembarquevtr' vtr.id %}">{{ vtr.viatura.patrimonio }}</a></td>
+                            <td>{{ vtr.viatura.dados_tecnicos.classificacao }}</td>
+                            <td>{{ vtr.final_dslc }}</td>
+                            <td>{{ vtr.motorista.passageiro.operacional.militar.nome_guerra.upper }}</td>
+                            <td>{{ vtr.chefe.passageiro.operacional.militar.nome_guerra.upper }}</td>
+                            <td>{{ vtr.passageiro.count }}</td>
+                            <td>
+                                <div class="row">
+                                    <div class="col">
+                                        <a href="{% url 'operacoes:updateplembvtr' vtr.id %}">
+                                            <button type="submit" class="btn btn-outline-warning"><i class="bi bi-arrow-clockwise"></i></button>
+                                        </a>
+                                    </div>
+                                    <div class="col">
+                                        <a href="{% url 'operacoes:delete_plano_embarque_vtr' vtr.id %}">
+                                            <button type="submit" class="btn btn-outline-danger"><i class="bi bi-trash"></i></button>
+                                        </a>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    <tr>
+                        <td colspan="2"><b>Total de Viaturas</b></td>
+                        <td colspan="2">{{ object.plano_embarque_vtr.count }}</td>
+                        <td colspan="2"><b>Efetivo Total</b></td>
+                        <td colspan="2">{{ passageiros }}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <br>
+            <br>
+            <div class="col-9">
+                <div class="col-lg-8 mx-auto p-4 py-md-5">
+                    <form method="get" action="{% url 'operacoes:readplanoembarquegeral' %}">
+                        {% csrf_token %}
+                        {{ form|crispy }}
+                        <fieldset>
+                            <input type="hidden" name="pk_atv" value="{{ object.atividade.id }}">
+                            <button type="submit" class="btn btn-outline-warning">Voltar</button>
+                        </fieldset>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% include 'footer.html' %}
+{% endblock %}
+

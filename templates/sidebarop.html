@@ -1,0 +1,39 @@
+{% load static %}
+<div class="d-flex flex-column flex-shrink-0 h-100 p-3 text-bg-dark" style="width: 100%;">
+    <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
+        <svg class="bi pe-none me-2" width="40" height="32"><use xlink:href="#bootstrap"></use></svg>
+        <span class="fs-4">Sidebar</span>
+    </a>
+    <hr>
+    <div class="d-flex flex-column flex-shrink-0 h-100 p-3 text-bg-dark" style="width: 100%;">
+        <ul class="nav nav-pills flex-column mb-auto">
+        {% for operacao in operacoes %}
+            <li class="nav-item">
+                <a href="{% url 'operacoes:readgeral' operacao.id %}" class="nav-link text-white" aria-current="page">
+                    {{ operacao.nome.upper }}
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'operacoes:readpessoal' %}" class="nav-link text-white" aria-current="page">
+                    PESSOAL
+                </a>
+            </li>
+            <li>
+                <form method="get" action="{% url 'operacoes:readplanoembarquegeral' %}">
+                    {% csrf_token %}
+                    <fieldset>
+                        <input type="hidden" name="pk_atv" value="{{ operacao.id }}">
+                        <button type="submit" class="nav-link text-white" aria-current="page">PLANO DE EMBARQUE</button>
+                    </fieldset>
+                </form>
+            </li>
+            <li>
+                <a href="{% url 'operacoes:readarmtop' operacao.id %}" class="nav-link text-white" aria-current="page">
+                    ARMAMENTO
+                </a>
+            </li>
+            <hr>
+        {% endfor %}
+        </ul>
+    </div>
+</div>
